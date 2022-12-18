@@ -1,4 +1,4 @@
-# a program for checking out books to users in a library
+# a program for simulating a library
 using Random
 
 
@@ -29,29 +29,34 @@ struct Book
 end 
 
 
-randomUser = User()
-println("typeof randomUser: ", typeof(randomUser))
-println("randomUser's id: ", randomUser.id, ", name: ", randomUser.name)
+mutable struct Library
+    name::String
+    books::Dict{String, Book} # Book objs are indexed by their id Strings
+    members::Dict{String, User} # User " ... "
+
+    function Library(newName::String)
+        newBooks = Dict{String, Book}()
+        newMembers = Dict{String, User}()
+        new(newName, newBooks, newMembers)
+    end
+end
+
+"Adds a generated user to the library."
+function addNewUser!(library::Library)
+    newUser = User()
+    println("prior", library.members)
+    merge!(library.members, Dict(newUser.id => newUser))
+    println("post", library.members)
+end
 
 
-# mutable struct Library
-#     name::String
-#     books::Dict{String, Book} # Book objs are indexed by their id Strings
-#     members::Dict{String, User} # User " ... "
 
-#     function Library(;newName::String)
-#         newBooks::Dict{String, Book}()
-#         newMembers::Dict{String, User}()
-#         new(newName, newBooks, newMembers)
-#     end
+# DEBUGGING
+# randomUser = User()
+# println("typeof randomUser: ", typeof(randomUser))
+# println("randomUser's id: ", randomUser.id, ", name: ", randomUser.name)
 
-#     # adds a generated user to the library
-#     function addNewUser()
-        
-#     end
-# end
-
-# end
-
-# # lets setup a library; the santa cruz public library
-# SCPL = Library("Santa Cruz Public Library", )
+SCPL = Library("Santa Cruz Public Library")
+println("typeof SCPL: ", typeof(SCPL))
+println("SCPL's name: ", SCPL.name, " books: ", SCPL.books, " members: ", SCPL.members)
+addNewUser!(SCPL)
